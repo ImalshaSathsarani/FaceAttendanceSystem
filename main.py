@@ -9,6 +9,8 @@ from firebase_admin import credentials, db
 from supabase import create_client
 from datetime import datetime
 import threading
+import os
+from dotenv import load_dotenv
 
 # --- CONFIGURATION ---
 ctk.set_appearance_mode("Dark")
@@ -47,16 +49,23 @@ class FaceAttendanceApp(ctk.CTk):
         self.process_webcam()
 
     def setup_resources(self):
+
+        load_dotenv()
+
         # Supabase
-        SUPABASE_URL = "https://ygxgejkfcuqbryizacry.supabase.co"
-        SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlneGdlamtmY3VxYnJ5aXphY3J5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjQ3NTcyMzMsImV4cCI6MjA4MDMzMzIzM30.9Z6cFhAdli8oGkz1iccoHEASoc_lUfWgj-ALG_wEjl8"
+        SUPABASE_URL = os.getenv("SUPABASE_URL")
+        SUPABASE_KEY = os.getenv("SUPABASE_KEY")
         self.supabase = create_client(SUPABASE_URL, SUPABASE_KEY)
 
         # Firebase
+        #Load Firebase Variables
+        
+        firebase_url = os.getenv("FIREBASE_URL")
+        
         cred = credentials.Certificate("serviceAccountKey.json")
         try:
             firebase_admin.initialize_app(cred, {
-                'databaseURL': "https://faceattendacerealtime-f9ac7-default-rtdb.firebaseio.com/"
+                'databaseURL': firebase_url
             })
         except ValueError:
             pass

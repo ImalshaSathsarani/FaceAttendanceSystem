@@ -1,10 +1,16 @@
 import firebase_admin
 from firebase_admin import credentials
 from firebase_admin import db
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
+
+firebase_url = os.getenv("FIREBASE_URL")
 
 cred = credentials.Certificate("serviceAccountKey.json")
 firebase_admin.initialize_app(cred,{
-    'databaseURL':"https://faceattendacerealtime-f9ac7-default-rtdb.firebaseio.com/"
+    'databaseURL':firebase_url
 })
 
 ref = db.reference('Students')
